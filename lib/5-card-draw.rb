@@ -28,14 +28,30 @@ end
 
 class Deck
     # getters and setters
-
-    
+    attr_reader :deck
     # attributes
+    def initialize
+        @deck = []
+        @length = deck.length
 
-
-
-    # methods
+        suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
+        values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
+        
+        suits.each do |suit|
+            values.each do |value|
+                @deck.push(Card.new(suit, value))
+            end
+        end
+    end
     
+    # methods
+    def shuffle
+        @deck.shuffle
+    end
+
+    def deal
+        @deck.pop
+    end
 end
 
 
