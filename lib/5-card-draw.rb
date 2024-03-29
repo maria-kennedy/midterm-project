@@ -5,45 +5,40 @@
 # 4. Players bet again.
 # 5. If any players have not folded, they reveal their hands; the strongest hand wins the pot.
 
-
-
 # Card
 # Represents a single playing card, identifiable by its suit and value.
 class Card
-    # getters and setters
     attr_reader :suit, :value
 
-    
-    # attributes
     def initialize(suit, value)
         @suit = suit
         @value = value
     end
-    # methods
-    
 end
 
 # Deck
 # Represents a deck of cards; responsible for shuffling and dealing cards.
 
 class Deck
+    suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
+    values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
     # getters and setters
     attr_reader :deck
     # attributes
     def initialize
         @deck = []
-        @length = deck.length
+        # @length = deck.length
 
         suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
         values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
         
         suits.each do |suit|
             values.each do |value|
-                @deck.push(Card.new(suit, value))
+                @deck << (Card.new(suit, value))
             end
         end
     end
-    
+
     # methods
     def shuffle
         @deck.shuffle
@@ -59,15 +54,23 @@ end
 # Hand
 # Contains the logic for determining the strength of a hand (pair, three-of-a-kind, two-pair, etc.), and for deciding which hand beats another.
 class Hand
-    # getters and setters
+    # iterate through each card in a player's hand
+    # determine which strength value from hash
+    # store player name and value in a hash called compare
+    # new method that finds greatest value and returns name
+    # if tie, winners split
+    attr_accessor :hand
 
-    
-    # attributes
-
-
-    # methods
+    def initialize(hand)
+        @hand = hand
+    end
+              
+    # def show_hand
+    #     @hand.each do |card|
+    #         puts "#{card.value} of #{card.suit}"
+    #     end
+    # end
 end
-
 
 
 # Player
@@ -75,13 +78,12 @@ end
 # • Ask the player which cards they wish to discard.
 # • Determine whether the player wishes to fold, see, or raise.
 class Player
-    # getters and setters
-
-    
-    # attributes
-
-
-    # methods
+    attr_accessor :name, :hand, :pot
+    def initialize(name)
+        @name = name
+        @hand = Hand.new([])
+        @pot = 0
+    end
 end
 
 

@@ -40,3 +40,19 @@ RSpec.describe Deck do
         end
     end
 end
+
+RSpec.describe Player do
+    let(:player) {Player.new('MK')}
+    context 'when a player is created' do
+        it 'creates a player with a name and emty pot' do
+            expect(player.name).to eq('MK')
+            expect(player.pot).to eq(0)
+        end
+    end
+    context 'when a player updates their pot' do
+        it 'updates the player pot' do
+            player.pot = 100
+            expect(player.pot).to eq(100)
+        end
+    end
+end
