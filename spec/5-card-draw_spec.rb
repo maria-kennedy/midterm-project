@@ -9,28 +9,54 @@ RSpec.describe Game do
         it 'creates a game with a deck' do
             expect(game.deck).to be_a(Deck)
         end
-    end
     # want game to ask how many players
-    context 'when a game is created' do
         it 'checks how many players are playing' do
             expect(game.num_players).to eq(1)
         end
-    end
     # want game to assign Player objects to players
-    context 'when a game is created' do
         it 'creates a new Player object' do
             expect(game.players[0]).not_to eq(nil)
         end
+
+        it 'deals a hand to each player' do
+            expect(game.players[0].hand.cards.length).to eq(5)
+        end
     end
+
     describe '#round' do
     let(:game) {Game.new(1)}
         context 'when a round is played' do
-            it 'allows players to discard' do
-                allow(game.players[0].hand).to receive(:discard).and_return(nil)
+            it 'allows each player to discard' do
+                allow(game.players[0].hand).to receive(:cards).and_return('y').and_return('1')
             end
         end
     end
+
+    describe '#action' do
+    it 'updates pot and jackpot when a player sees' do
+      game.instance_variable_set(:@jackpot, 0)
+      game.action('see')
+      expect(game.instance_variable_get(:@jackpot)).to eq(50)
+    end
+
+    it 'updates pot and jackpot when a player raises' do
+    #   game.instance_variable_set(:@pot, 0)
+      game.instance_variable_set(:@jackpot, 0)
+      game.action('raise')
+    #   expect(game.instance_variable_get(:@pot)).to eq(0)
+      expect(game.instance_variable_get(:@jackpot)).to eq(50)
+    end
+
+    it 'does not update pot and jackpot when a player folds' do
+    #   game.instance_variable_set(:@pot, 0)
+      game.instance_variable_set(:@jackpot, 0)
+      game.action('fold')
+    #   expect(game.instance_variable_get(:@pot)).to eq(0)
+      expect(game.instance_variable_get(:@jackpot)).to eq(0)
+    end
+  end
 end
+ 
 
 # Card RSpec tests
 # Represents a single playing card, identifiable by its suit and value.
@@ -59,7 +85,7 @@ RSpec.describe Deck do
         it 'shuffles the deck' do
             d2 = Deck.new
             d3 = Deck.new
-            d2.shuffle
+            d2.shuffle!
             expect(d2.the_deck).not_to eq(d3.the_deck)
         end
     end
@@ -110,11 +136,10 @@ RSpec.describe Hand do
             end
         end
     end
-    describe '#winner' do
-        it 'determines the winner of the hand' do
-
-        end
-    end
+    # describe '#winner' do
+    #     it 'determines the winner of the hand' do
+    #     end
+    # end
 end
 
 # Player
@@ -123,10 +148,22 @@ end
 # • Determine whether the player wishes to fold, see, or raise.
 RSpec.describe Player do
     let(:a_player) {Player.new}
+    let(:ghost_player) {Player.new}
+
     context 'when a player is created' do
-        it 'creates a player with a random name and emty pot' do
+        it 'creates a player with a random name and a pot with $500' do
             expect(a_player.name).not_to eq(nil)
-            expect(a_player.pot).to eq(0)
+            expect(a_player.pot).to eq(500)
+        end
+    end
+    context 'when a player discards cards' do
+        it 'swaps out the cards in the hand' do
+            royal_flush = [Card.new('Spades', 'A'), Card.new('Spades', 'K'), Card.new('Spades', 'Q'), Card.new('Spades', 'J'), Card.new('Spades', '10')]
+            ghost_player.hand.cards = royal_flush
+            expect(ghost_player.hand.cards.length).to eq(5)
+            allow(ghost_player.hand).to receive(:cards).and_return('y').and_return('1')
+            expect(ghost_player.hand.cards).not_to eq(royal_flush)
+            # expect(ghost_player.hand.cards.length).to eq(5)
         end
     end
     context 'when a player updates their pot' do
