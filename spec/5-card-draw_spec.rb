@@ -4,25 +4,30 @@ require_relative '../lib/5-card-draw'
 # Manages the overall flow of the poker game, including: Holding the deck of cards. Keeping track of whose turn it is. Managing the pot and bets placed by players.
 RSpec.describe Game do
     let(:game) {Game.new(1)}
-    
     # want game to create a new deck
     context 'when a game is created' do
         it 'creates a game with a deck' do
             expect(game.deck).to be_a(Deck)
         end
     end
-
     # want game to ask how many players
     context 'when a game is created' do
         it 'checks how many players are playing' do
             expect(game.num_players).to eq(1)
         end
     end
-
     # want game to assign Player objects to players
     context 'when a game is created' do
         it 'creates a new Player object' do
             expect(game.players[0]).not_to eq(nil)
+        end
+    end
+    describe '#round' do
+    let(:game) {Game.new(1)}
+        context 'when a round is played' do
+            it 'allows players to discard' do
+                allow(game.players[0].hand).to receive(:discard).and_return(nil)
+            end
         end
     end
 end
@@ -89,14 +94,6 @@ RSpec.describe Hand do
             end
         end
 
-        # context 'when the hand contains two pairs' do
-        #     it 'returns a hand score of 4' do
-        #         hand = Hand.new
-        #         hand.cards = [Card.new('Spades', 'A'), Card.new('Hearts', 'A'), Card.new('Diamonds', 'K'), Card.new('Clubs', 'K')]
-        #         expect(hand.hand_score).to eq(4)
-        #     end
-        # end
-
         context 'when the hand contains a pair' do
             it 'returns a hand score of 2' do
                 hand = Hand.new
@@ -111,6 +108,11 @@ RSpec.describe Hand do
                 hand.cards = [Card.new('Spades', 'A'), Card.new('Hearts', '8'), Card.new('Diamonds', '7'), Card.new('Clubs', 'J')]
                 expect(hand.hand_score).to eq(1)
             end
+        end
+    end
+    describe '#winner' do
+        it 'determines the winner of the hand' do
+
         end
     end
 end

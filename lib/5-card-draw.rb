@@ -20,6 +20,26 @@ class Game
             5.times {player.hand.recieve(@deck.deal)}
         end
     end
+
+
+
+    def round
+        # each player:
+
+            # asks player if they wish to discard (call discard method on hand)
+
+            # asks player if they wish to fold, see, or raise
+
+            # updates player's pot
+
+        # after all players have acted, determine the winner (call winner method on hand)
+
+        # award the pot to the winner
+
+        # ask if players wish to play another round
+
+        # if so, deal a new hand to each player
+    end
 end
 
 # Card
@@ -76,6 +96,50 @@ class Hand
         @cards << card
     end
 
+    def hand_score
+        # check for 4 of a kind
+        if @cards.any?{ |card| @cards.count{ |c| c.value == card.value } == 4 }
+            return 8
+        # check for 3 of a kind
+        elsif @cards.any?{ |card| @cards.count{ |c| c.value == card.value } == 3 }
+            return 7
+        # check for a pair
+        elsif @cards.any?{ |card| @cards.count{ |c| c.value == card.value } == 2 }
+            return 2
+        else
+            return 1
+        end
+    end
+
+    def winner()
+
+    end
+end
+
+
+# Player
+class Player
+    attr_accessor :name, :hand, :pot
+    def initialize(deck = nil)
+        @name = UNICORN_NAMES.sample
+        @pot = 0
+        @hand = Hand.new
+    end
+
+    def discard
+        puts 'Do you wish to discard any cards? (y/n)'
+        response = gets.chomp.downcase
+        if response == 'y'
+            # remove requested number of cards from hand and return to deck, then deal new cards
+            puts 'How many cards would you like to discard?'
+            toss = gets.chomp.to_i
+            
+        end
+        
+    end
+end
+
+###################################
     # def hand_score
     #     # royal flush
     #     if @cards.all? { |card| %w(A K Q J 10).include?(card.value) } && @cards.map(&:suit).uniq.length == 1
@@ -103,30 +167,3 @@ class Hand
     #         return 1
     #     end
     # end
-    def hand_score
-        # check for 4 of a kind
-        if @cards.any?{ |card| @cards.count{ |c| c.value == card.value } == 4 }
-            return 8
-        # check for 3 of a kind
-        elsif @cards.any?{ |card| @cards.count{ |c| c.value == card.value } == 3 }
-            return 7
-        # check for a pair
-        elsif @cards.any?{ |card| @cards.count{ |c| c.value == card.value } == 2 }
-            return 2
-        else
-            return 1
-        end
-    end
-end
-
-
-# Player
-class Player
-    attr_accessor :name, :hand, :pot
-    def initialize(deck = nil)
-        @name = UNICORN_NAMES.sample
-        @pot = 0
-        @hand = Hand.new
-    end
-end
-
