@@ -1,5 +1,32 @@
 require_relative '../lib/5-card-draw'
 
+# Game RSpec Test
+# Manages the overall flow of the poker game, including: Holding the deck of cards. Keeping track of whose turn it is. Managing the pot and bets placed by players.
+RSpec.describe Game do
+    let(:game) {Game.new(1)}
+    
+    # want game to create a new deck
+    context 'when a game is created' do
+        it 'creates a game with a deck' do
+            expect(game.deck).to be_a(Deck)
+        end
+    end
+
+    # want game to ask how many players
+    context 'when a game is created' do
+        it 'checks how many players are playing' do
+            expect(game.num_players).to eq(1)
+        end
+    end
+
+    # want game to assign Player objects to players
+    context 'when a game is created' do
+        it 'creates a new Player object' do
+            expect(game.players[0]).not_to eq(nil)
+        end
+    end
+end
+
 # Card RSpec tests
 # Represents a single playing card, identifiable by its suit and value.
 RSpec.describe Card do
@@ -19,7 +46,7 @@ RSpec.describe Deck do
     describe '#initialize' do
         it 'creates a deck of 52 cards' do
             d1 = Deck.new
-            expect(d1.deck.length).to eq(52)
+            expect(d1.the_deck.length).to eq(52)
         end
     end
 
@@ -27,7 +54,8 @@ RSpec.describe Deck do
         it 'shuffles the deck' do
             d2 = Deck.new
             d3 = Deck.new
-            expect(d2.deck).not_to eq(d3.deck)
+            d2.shuffle
+            expect(d2.the_deck).not_to eq(d3.the_deck)
         end
     end
 
@@ -35,24 +63,34 @@ RSpec.describe Deck do
         it 'deals a card from the deck' do          
             d4 = Deck.new
             c2 = d4.deal
-            expect(d4.deck.length).to eq(51) # length should be 51 after dealing a card
+            expect(d4.the_deck.length).to eq(51) # length should be 51 after dealing a card
             expect(c2).to be_a(Card)
         end
     end
 end
 
+# Hand
+# Contains the logic for determining the strength of a hand (pair, three-of-a-kind, two-pair, etc.), and for deciding which hand beats another.
+RSpec.describe Hand do
+
+end
+
+# Player
+# Represents a player in the game, holding a hand and a pot. This class should include methods to:
+# • Ask the player which cards they wish to discard.
+# • Determine whether the player wishes to fold, see, or raise.
 RSpec.describe Player do
-    let(:player) {Player.new('MK')}
+    let(:a_player) {Player.new}
     context 'when a player is created' do
-        it 'creates a player with a name and emty pot' do
-            expect(player.name).to eq('MK')
-            expect(player.pot).to eq(0)
+        it 'creates a player with a random name and emty pot' do
+            expect(a_player.name).not_to eq(nil)
+            expect(a_player.pot).to eq(0)
         end
     end
     context 'when a player updates their pot' do
         it 'updates the player pot' do
-            player.pot = 100
-            expect(player.pot).to eq(100)
+            a_player.pot = 100
+            expect(a_player.pot).to eq(100)
         end
     end
 end

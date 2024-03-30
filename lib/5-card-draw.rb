@@ -1,9 +1,26 @@
-# Rules of Five Card Draw Poker
-# 1. Each player is dealt five cards.
-# 2. Players bet; they may fold, see the current bet, or raise.
-# 3. In turn, each player can choose to discard up to three cards and is then dealt new cards from the deck to replace the discarded ones.
-# 4. Players bet again.
-# 5. If any players have not folded, they reveal their hands; the strongest hand wins the pot.
+SUITS = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
+VALUES = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
+UNICORN_NAMES = ['Rainbow Sparklehoof', 'Moonbeam Glittermane', 'Stardust Twinklehooves', 'Sunshine Rainbowmane', 'Crystal Sparkleshine', 'Starlight Shimmerhoof', 'Dreamy Stardusttail', 'Twilight Glitterhoof', 'Whispering Moonbeam', 'Mystical Sparklestride']
+
+
+# Game
+class Game
+    # getters and setters
+    attr_accessor :deck, :players, :num_players, :name
+    # attributes
+    def initialize(num_players = 0)
+        @deck = Deck.new
+        @num_players = num_players
+
+        # player created from Player class
+        @players = []
+        num_players.times {@players << Player.new(@deck)}
+        # initial hand delt to each player
+        @players.each do |player|
+            5.times {player.hand.reciever(@deck.deal)}
+        end
+    end
+end
 
 # Card
 # Represents a single playing card, identifiable by its suit and value.
@@ -18,34 +35,25 @@ end
 
 # Deck
 # Represents a deck of cards; responsible for shuffling and dealing cards.
-
 class Deck
-    suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
-    values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
-    # getters and setters
-    attr_reader :deck
-    # attributes
-    def initialize
-        @deck = []
-        # @length = deck.length
+    attr_reader :the_deck
 
-        suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
-        values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
-        
-        suits.each do |suit|
-            values.each do |value|
-                @deck << (Card.new(suit, value))
+    def initialize
+        @the_deck = []
+        SUITS.each do |suit|
+            VALUES.each do |value|
+                @the_deck << (Card.new(suit, value))
             end
         end
     end
 
     # methods
     def shuffle
-        @deck.shuffle
+        @the_deck.shuffle!
     end
 
     def deal
-        @deck.pop
+        @the_deck.pop
     end
 end
 
@@ -53,52 +61,26 @@ end
 
 # Hand
 # Contains the logic for determining the strength of a hand (pair, three-of-a-kind, two-pair, etc.), and for deciding which hand beats another.
-class Hand
-    # iterate through each card in a player's hand
-    # determine which strength value from hash
-    # store player name and value in a hash called compare
-    # new method that finds greatest value and returns name
-    # if tie, winners split
-    attr_accessor :hand
+class Hand 
+    attr_reader :cards
 
-    def initialize(hand)
-        @hand = hand
+    def initialize
+        @cards = []
     end
-              
-    # def show_hand
-    #     @hand.each do |card|
-    #         puts "#{card.value} of #{card.suit}"
-    #     end
-    # end
+    def reciever(card)
+        @cards << card
+    end
+
 end
 
 
 # Player
-# Represents a player in the game, holding a hand and a pot. This class should include methods to:
-# • Ask the player which cards they wish to discard.
-# • Determine whether the player wishes to fold, see, or raise.
 class Player
     attr_accessor :name, :hand, :pot
-    def initialize(name)
-        @name = name
-        @hand = Hand.new([])
+    def initialize(deck = nil)
+        @name = UNICORN_NAMES.sample
         @pot = 0
+        @hand = Hand.new
     end
 end
 
-
-
-# Game
-# Manages the overall flow of the poker game, including:
-# • Holding the deck of cards.
-# • Keeping track of whose turn it is.
-# • Managing the pot and bets placed by players.
-class Game
-    # getters and setters
-
-    
-    # attributes
-
-
-    # methods
-end
