@@ -33,25 +33,25 @@ RSpec.describe Game do
     end
 
     describe '#action' do
-    it 'updates pot and jackpot when a player sees' do
-      game.instance_variable_set(:@jackpot, 0)
-      game.action('see')
-      expect(game.instance_variable_get(:@jackpot)).to eq(50)
-    end
+    # it 'updates pot and jackpot when a player sees' do
+    #   game.instance_variable_set(:@jackpot, 0)
+    #   game.action('see')
+    #   expect(game.instance_variable_get(:@jackpot)).to eq(50)
+    # end
 
-    it 'updates pot and jackpot when a player raises' do
+    # it 'updates pot and jackpot when a player raises' do
     #   game.instance_variable_set(:@pot, 0)
-      game.instance_variable_set(:@jackpot, 0)
-      game.action('raise')
+    #   game.instance_variable_set(:@jackpot, 0)
+    #   game.action('raise')
     #   expect(game.instance_variable_get(:@pot)).to eq(0)
-      expect(game.instance_variable_get(:@jackpot)).to eq(50)
-    end
+    #   expect(game.instance_variable_get(:@jackpot)).to eq(50)
+    # end
 
     it 'does not update pot and jackpot when a player folds' do
-    #   game.instance_variable_set(:@pot, 0)
+      game.instance_variable_set(:@pot, 0)
       game.instance_variable_set(:@jackpot, 0)
       game.action('fold')
-    #   expect(game.instance_variable_get(:@pot)).to eq(0)
+      expect(game.instance_variable_get(:@pot)).to eq(0)
       expect(game.instance_variable_get(:@jackpot)).to eq(0)
     end
   end

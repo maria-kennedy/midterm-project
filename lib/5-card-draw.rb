@@ -5,24 +5,22 @@ UNICORN_NAMES = ['Rainbow Sparklehoof', 'Moonbeam Glittermane', 'Stardust Twinkl
 # Game
 class Game
     # getters and setters
-    attr_accessor :deck, :players, :num_players, :name
+    attr_accessor :deck, :players, :num_players, :name, :jackpot
 
     # attributes
     def initialize(num_players = 0)
         @deck = Deck.new
         @num_players = num_players
         @jackpot = 0
-        @player = nil
+
 
         # player created from Player class
         @players = []
         num_players.times {@players << Player.new(@deck)}
         # initial hand delt to each player
         @players.each do |player|
-
             5.times {player.hand.recieve(@deck.deal)}
         end
-        # puts "Welcome #{@players.each { |player| puts player.name }}!" # display player names
         puts 'Welcome! Player count: ' + num_players.to_s
     end
 
@@ -68,7 +66,7 @@ class Game
 
     def action(input)
         if input != 'fold'
-            player.player.pot -= 50
+            name.player.pot -= 50
             @jackpot += 50
         end
     end
