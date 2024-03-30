@@ -72,7 +72,47 @@ end
 # Hand
 # Contains the logic for determining the strength of a hand (pair, three-of-a-kind, two-pair, etc.), and for deciding which hand beats another.
 RSpec.describe Hand do
+    describe '#hand_score' do
+        context 'when the hand contains four of a kind' do
+            it 'returns a hand score of 8' do
+                hand = Hand.new
+                hand.cards = [Card.new('Spades', 'A'),Card.new('Hearts', 'A'),Card.new('Diamonds', 'A'),Card.new('Clubs', 'A')]
+                expect(hand.hand_score).to eq(8)
+            end
+        end
 
+        context 'when the hand contains three of a kind' do
+            it 'returns a hand score of 7' do
+                hand = Hand.new
+                hand.cards = [Card.new('Spades', 'K'),Card.new('Hearts', 'K'), Card.new('Diamonds', 'K'), Card.new('Clubs', '2')]
+                expect(hand.hand_score).to eq(7)
+            end
+        end
+
+        # context 'when the hand contains two pairs' do
+        #     it 'returns a hand score of 4' do
+        #         hand = Hand.new
+        #         hand.cards = [Card.new('Spades', 'A'), Card.new('Hearts', 'A'), Card.new('Diamonds', 'K'), Card.new('Clubs', 'K')]
+        #         expect(hand.hand_score).to eq(4)
+        #     end
+        # end
+
+        context 'when the hand contains a pair' do
+            it 'returns a hand score of 2' do
+                hand = Hand.new
+                hand.cards = [Card.new('Spades', 'Q'), Card.new('Hearts', 'Q'), Card.new('Diamonds', 'K'), Card.new('Clubs', 'J')]
+                expect(hand.hand_score).to eq(2)
+            end
+        end
+
+        context 'when the hand does not contain any matching values' do
+            it 'returns a hand score of 1' do
+                hand = Hand.new
+                hand.cards = [Card.new('Spades', 'A'), Card.new('Hearts', '8'), Card.new('Diamonds', '7'), Card.new('Clubs', 'J')]
+                expect(hand.hand_score).to eq(1)
+            end
+        end
+    end
 end
 
 # Player

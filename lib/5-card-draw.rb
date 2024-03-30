@@ -2,11 +2,11 @@ SUITS = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
 VALUES = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
 UNICORN_NAMES = ['Rainbow Sparklehoof', 'Moonbeam Glittermane', 'Stardust Twinklehooves', 'Sunshine Rainbowmane', 'Crystal Sparkleshine', 'Starlight Shimmerhoof', 'Dreamy Stardusttail', 'Twilight Glitterhoof', 'Whispering Moonbeam', 'Mystical Sparklestride']
 
-
 # Game
 class Game
     # getters and setters
     attr_accessor :deck, :players, :num_players, :name
+
     # attributes
     def initialize(num_players = 0)
         @deck = Deck.new
@@ -17,7 +17,7 @@ class Game
         num_players.times {@players << Player.new(@deck)}
         # initial hand delt to each player
         @players.each do |player|
-            5.times {player.hand.reciever(@deck.deal)}
+            5.times {player.hand.recieve(@deck.deal)}
         end
     end
 end
@@ -30,6 +30,10 @@ class Card
     def initialize(suit, value)
         @suit = suit
         @value = value
+    end
+
+    def to_s
+        "#{value} of #{suit}"
     end
 end
 
@@ -61,16 +65,58 @@ end
 
 # Hand
 # Contains the logic for determining the strength of a hand (pair, three-of-a-kind, two-pair, etc.), and for deciding which hand beats another.
-class Hand 
-    attr_reader :cards
+class Hand
+    attr_accessor :cards
 
     def initialize
         @cards = []
     end
-    def reciever(card)
+
+    def recieve(card)
         @cards << card
     end
 
+    # def hand_score
+    #     # royal flush
+    #     if @cards.all? { |card| %w(A K Q J 10).include?(card.value) } && @cards.map(&:suit).uniq.length == 1
+    #         return 10
+    #     # four of a kind
+    #     elsif @cards.any? { |card| @cards.count { |c| c.value == card.value } == 4 }
+    #         return 8
+    #     # full house
+    #     elsif @cards.map(&:value).uniq.length == 2 && @cards.any? { |card| @cards.count { |c| c.value == card.value } == 3 }
+    #         return 7
+    #     # flush
+    #     elsif @cards.map(&:suit).uniq.length == 1
+    #         return 6
+    #     # three of a kind
+    #     elsif @cards.any? { |card| @cards.count { |c| c.value == card.value } == 3 }
+    #         return 4
+    #     # two pair
+    #     elsif @cards.map(&:value).uniq.length == 3
+    #         return 3
+    #     # pair
+    #     elsif @cards.map(&:value).uniq.length == 4
+    #         return 2
+    #     # high card
+    #     else
+    #         return 1
+    #     end
+    # end
+    def hand_score
+        # check for 4 of a kind
+        if @cards.any?{ |card| @cards.count{ |c| c.value == card.value } == 4 }
+            return 8
+        # check for 3 of a kind
+        elsif @cards.any?{ |card| @cards.count{ |c| c.value == card.value } == 3 }
+            return 7
+        # check for a pair
+        elsif @cards.any?{ |card| @cards.count{ |c| c.value == card.value } == 2 }
+            return 2
+        else
+            return 1
+        end
+    end
 end
 
 
